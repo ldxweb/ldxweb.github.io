@@ -130,17 +130,28 @@ systemctl restart apache2</pre>
 	<p>Add to crontab for the user running Nextcloud:</p>
 	<pre>*/5 * * * * /usr/bin/php /home/webs/sky/cron.php</pre>
 
-	<p>Add to <code>/home/sky/config/config.php:</p>
+	<p>Add to <code>/home/sky/config/config.php</code>:</p>
 	<pre>'memcache.local' =&gt; '\\OC\\Memcache\\APCu',
-'default_phone_region' =&gt; 'DK',</pre>
+'default_phone_region' =&gt; 'DK',
+'maintenance_window_start' =&gt; 1,</pre>
 
 	<p>Add to <code>/etc/php/XX/cli/php.ini</code> at the bottom:</p>
 	<pre>[apc]
 apc.enable_cli=1</pre>
 
+	<p>Add to <code>/etc/php/XX/apache2/php.ini</code> - locate the existing block and adjust:</p>
+	<pre>[opcache]
+opcache.enable=1
+opcache.memory_consumption=128
+opcache.interned_strings_buffer=32</pre>
+
 	<p>Log into Nextcloud, go to <i>Basic Settings</i> and configure email.</p>
 	<p>Then, in <i>Apps</i>, go to <i>Security</i> and enable <b>Two-Factor TOTP Provider</b>.</p>
 	<p>Go to <i>Personal -&gt; Security</i>.  Enable <b>TOTP</b>.</p>
+
+	<p>Run:</p>
+	<pre>cd /home/sky
+php occ db:add-missing-indices</pre>
 
 	<p>Lastly, visit the <i>Administration settings -> Overview</i> and correct any remaining issues.</p>
 	<p><br /></p>
